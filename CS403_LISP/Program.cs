@@ -15,8 +15,12 @@ public class Program
         // Run tests for Sprint 2
         TestSprint2();
 
+        // Run tests for Sprint 3
+        TestSprint3();  // Add this line
+
         Console.WriteLine("All tests completed.");
     }
+
 
     private static void TestParser()
     {
@@ -99,6 +103,30 @@ public class Program
         Console.WriteLine(SExprPrinter.Print(consCell));  // should print (one two three)
     }
 
+        public static void TestSprint3()
+    {
+    // Arithmetic Tests
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Add(SExpr.CreateAtom("2"), SExpr.CreateAtom("3"))));  // 5
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Sub(SExpr.CreateAtom("3"), SExpr.CreateAtom("2"))));  // 1
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Mul(SExpr.CreateAtom("2"), SExpr.CreateAtom("3"))));  // 6
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Div(SExpr.CreateAtom("6"), SExpr.CreateAtom("3"))));  // 2
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Mod(SExpr.CreateAtom("5"), SExpr.CreateAtom("3"))));  // 2
+
+    // Relational Tests
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Lt(SExpr.CreateAtom("2"), SExpr.CreateAtom("3"))));   // #t
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Gt(SExpr.CreateAtom("3"), SExpr.CreateAtom("2"))));   // #t
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Lte(SExpr.CreateAtom("2"), SExpr.CreateAtom("2"))));  // #t
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Gte(SExpr.CreateAtom("3"), SExpr.CreateAtom("2"))));  // #t
+
+    // Equality Test
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Eq(SExpr.CreateAtom("2"), SExpr.CreateAtom("2"))));   // #t
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Eq(SExpr.CreateAtom("2"), SExpr.CreateAtom("3"))));   // nil
+
+    // Logic Test
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Not(SExpr.Nil)));  // #t
+    Console.WriteLine(SExprPrinter.Print(SExprUtils.Not(SExpr.Truth)));  // nil
+    }
+
     // Helper function to check and display results
     private static void Check(bool condition, string testName)
     {
@@ -111,4 +139,6 @@ public class Program
             Console.WriteLine($"[FAIL] {testName}");
         }
     }
+
+
 }
