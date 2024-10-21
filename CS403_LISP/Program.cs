@@ -6,17 +6,13 @@ public class Program
     {
         Console.WriteLine("Running tests...");
 
-        // Run tests for Parser
         TestParser();
 
-        // Run tests for Printer
         TestPrinter();
 
-        // Run tests for Sprint 2
         TestSprint2();
 
-        // Run tests for Sprint 3
-        TestSprint3();  // Add this line
+        TestSprint3();  
 
         Console.WriteLine("All tests completed.");
     }
@@ -127,7 +123,6 @@ public class Program
     Console.WriteLine(SExprPrinter.Print(SExprUtils.Not(SExpr.Truth)));  // nil
     }
 
-    // Helper function to check and display results
     private static void Check(bool condition, string testName)
     {
         if (condition)
