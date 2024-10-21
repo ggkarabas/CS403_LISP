@@ -13,6 +13,7 @@ public class Program
         TestSprint3();
         TestSprint4();
         TestSprint5();
+        TestUserDefinedFunctions();
 
         Console.WriteLine("All tests completed.");
     }
@@ -227,7 +228,24 @@ public class Program
     Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(condExpr)));  // Should print 2
 }
 
+    public static void TestUserDefinedFunctions()
+    {
+        var defineFn = new SExpr.List(new System.Collections.Generic.List<SExpr>
+        {
+            new SExpr.Atom("fn"),
+            new SExpr.Atom("add1"),
+            new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("x") }),
+            new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("add"), new SExpr.Atom("x"), new SExpr.Atom("1") })
+        });
+        Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(defineFn)));  // Should print "add1"
 
+        var callFn = new SExpr.List(new System.Collections.Generic.List<SExpr>
+        {
+            new SExpr.Atom("add1"),
+            new SExpr.Atom("5")
+        });
+        Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(callFn)));  // Should print "6"
+    }
 
     private static void Check(bool condition, string testName)
     {

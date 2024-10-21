@@ -1,7 +1,14 @@
 public static class SExprEvaluator
 {
-    private static List<SExpr> symbolList = new List<SExpr>();  
+    private static List<SExpr> symbolList = new List<SExpr>(); 
     private static List<SExpr> valueList = new List<SExpr>(); 
+
+    // lists for user-defined functions
+    private static List<SExpr> functionList = new List<SExpr>();  
+    private static List<SExpr> functionArgsList = new List<SExpr>(); 
+    private static List<SExpr> functionBodyList = new List<SExpr>(); 
+
+    private static Stack<(List<SExpr> symbols, List<SExpr> values)> envStack = new Stack<(List<SExpr>, List<SExpr>)>();
 
     public static SExpr Eval(SExpr expr)
     {
@@ -18,19 +25,31 @@ public static class SExprEvaluator
         if (SExprUtils.IsList(expr))
         {
             var list = expr as SExpr.List;
-            var function = Eval(list.Elements[0]);  // The function symbol (like 'add', 'sub', etc.)
+            var function = Eval(list.Elements[0]);
 
+            // Handle "quote"
             if (SExprUtils.Eq(function, new SExpr.Atom("quote")) == SExpr.Truth)
             {
-                return list.Elements[1];  // Return the second element of the list (cadr)
+                return list.Elements[1];  
             }
 
+            // Handle "set"
             if (SExprUtils.Eq(function, new SExpr.Atom("set")) == SExpr.Truth)
             {
                 var name = list.Elements[1];
                 var value = Eval(list.Elements[2]);
                 Set(name, value);
                 return value;
+            }
+
+            if (SExprUtils.Eq(function, new SExpr.Atom("fn")) == SExpr.Truth)
+            {
+                var fname = list.Elements[1];  
+                var args = list.Elements[2];   
+                var body = list.Elements[3];  
+
+                SetFunction(fname, args, body);
+                return fname;  // Return the function name as confirmation
             }
 
             if (SExprUtils.Eq(function, new SExpr.Atom("add")) == SExpr.Truth)
@@ -54,7 +73,6 @@ public static class SExprEvaluator
                 return SExprUtils.Mod(Eval(list.Elements[1]), Eval(list.Elements[2]));
             }
 
-            // Handle logic functions (and, or, not)
             if (SExprUtils.Eq(function, new SExpr.Atom("and")) == SExpr.Truth)
             {
                 return Eval(list.Elements[1]) == SExpr.Nil ? SExpr.Nil : Eval(list.Elements[2]);
@@ -96,13 +114,31 @@ public static class SExprEvaluator
                 }
                 return SExpr.Nil;
             }
+
+            if (IsFunction(function))
+            {
+                return EvalUserFunction(function, list.Elements.Skip(1).ToList());
+            }
         }
 
         throw new ArgumentException("Undefined behavior");
     }
 
+    // Lookup for variables and function arguments
     public static SExpr Lookup(SExpr symbol)
     {
+        if (envStack.Count > 0)
+        {
+            var (symbols, values) = envStack.Peek();
+            for (int i = 0; i < symbols.Count; i++)
+            {
+                if (SExprUtils.Eq(symbols[i], symbol) == SExpr.Truth)
+                {
+                    return values[i];
+                }
+            }
+        }
+
         for (int i = 0; i < symbolList.Count; i++)
         {
             if (SExprUtils.Eq(symbolList[i], symbol) == SExpr.Truth)
@@ -110,6 +146,7 @@ public static class SExprEvaluator
                 return valueList[i];
             }
         }
+
         return symbol;  
     }
 
@@ -117,5 +154,35 @@ public static class SExprEvaluator
     {
         symbolList.Add(symbol);
         valueList.Add(value);
+    }
+
+    public static void SetFunction(SExpr fname, SExpr args, SExpr body)
+    {
+        functionList.Add(fname);
+        functionArgsList.Add(args);
+        functionBodyList.Add(body);
+    }
+
+    public static bool IsFunction(SExpr symbol)
+    {
+        return functionList.Any(f => SExprUtils.Eq(f, symbol) == SExpr.Truth);
+    }
+
+    // Evaluate a user-defined function call
+    public static SExpr EvalUserFunction(SExpr function, List<SExpr> actualArgs)
+    {
+        var index = functionList.FindIndex(f => SExprUtils.Eq(f, function) == SExpr.Truth);
+        var formalArgs = functionArgsList[index] as SExpr.List;
+        var body = functionBodyList[index];
+
+        var values = actualArgs.Select(arg => Eval(arg)).ToList();
+
+        envStack.Push((formalArgs.Elements, values));
+
+        var result = Eval(body);
+
+        envStack.Pop();
+
+        return result;
     }
 }
