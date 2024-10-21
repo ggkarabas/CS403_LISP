@@ -2,20 +2,20 @@
 
 public class Program
 {
+
     public static void Main()
     {
         Console.WriteLine("Running tests...");
 
         TestParser();
-
         TestPrinter();
-
         TestSprint2();
-
-        TestSprint3();  
+        TestSprint3();
+        TestSprint4();
 
         Console.WriteLine("All tests completed.");
     }
+
 
 
     private static void TestParser()
@@ -122,6 +122,45 @@ public class Program
     Console.WriteLine(SExprPrinter.Print(SExprUtils.Not(SExpr.Nil)));  // #t
     Console.WriteLine(SExprPrinter.Print(SExprUtils.Not(SExpr.Truth)));  // nil
     }
+
+    public static void TestSprint4()
+    {
+    // Test nil and numbers
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.Nil)));  // Should print nil
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.CreateAtom("42"))));  // Should print 42
+
+    // Test symbols and set/lookup
+    SExprEvaluator.Set(new SExpr.Atom("x"), SExpr.CreateAtom("10"));
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("x"))));  // Should print 10
+
+    // Test quote
+    var quoteExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
+    {
+        new SExpr.Atom("quote"),
+        new SExpr.Atom("hello")
+    });
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(quoteExpr)));  // Should print hello
+
+    // Test set and lookup
+    var setExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
+    {
+        new SExpr.Atom("set"),
+        new SExpr.Atom("y"),
+        new SExpr.Atom("5")
+    });
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(setExpr)));  // Should print 5
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("y"))));  // Should print 5
+
+    // Test add
+    var addExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
+    {
+        new SExpr.Atom("add"),
+        new SExpr.Atom("3"),
+        new SExpr.Atom("4")
+    });
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(addExpr)));  // Should print 7
+    }
+
 
     private static void Check(bool condition, string testName)
     {

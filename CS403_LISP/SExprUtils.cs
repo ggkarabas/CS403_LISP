@@ -125,4 +125,15 @@ public static class SExprUtils
     {
         return expr == SExpr.Nil ? SExpr.Truth : SExpr.Nil;
     }
+
+    public static SExpr Cadr(SExpr list)
+    {
+    return Car(Cdr(list));
+    }
+
+    public static SExpr Caddr(SExpr list)
+    {
+        return Car(Cdr(Cdr(list)));
+    }
+
 }
