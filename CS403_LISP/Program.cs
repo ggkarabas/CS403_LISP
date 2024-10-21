@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 public class Program
 {
@@ -12,9 +12,9 @@ public class Program
         // Run tests for Printer
         TestPrinter();
 
-        // If you have additional tests, add them here
-        // TestEvaluator();
-        
+        // Run tests for Sprint 2
+        TestSprint2();
+
         Console.WriteLine("All tests completed.");
     }
 
@@ -73,6 +73,30 @@ public class Program
         Check(SExprPrinter.Print(nestedList) == "(define x (10 20))", "Test 3: Print nested list");
 
         Console.WriteLine("Printer Tests Completed.\n");
+    }
+
+    private static void TestSprint2()
+    {
+        // Test Nil and Truth
+        Console.WriteLine(SExpr.Nil);   // should print nil
+        Console.WriteLine(SExpr.Truth); // should print #t
+
+        // Test Atom (Symbol and Number)
+        var symbolAtom = SExpr.CreateAtom("symbol");
+        Console.WriteLine(SExprPrinter.Print(symbolAtom));  // should print symbol
+
+        var numberAtom = SExpr.CreateAtom("411");
+        Console.WriteLine(SExprPrinter.Print(numberAtom));  // should print 411
+
+        // Test Cons Cells
+        var consCell = new SExpr.ConsCell(
+            SExpr.CreateAtom("one"),
+            new SExpr.ConsCell(
+                SExpr.CreateAtom("two"),
+                new SExpr.ConsCell(SExpr.CreateAtom("three"), SExpr.Nil)
+            )
+        );
+        Console.WriteLine(SExprPrinter.Print(consCell));  // should print (one two three)
     }
 
     // Helper function to check and display results
