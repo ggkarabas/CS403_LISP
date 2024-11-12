@@ -1,3 +1,5 @@
+// implements an SEXPR parser:
+
 using System;
 using System.Collections.Generic;
 using System.Text;

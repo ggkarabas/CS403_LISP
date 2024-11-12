@@ -1,3 +1,5 @@
+// Defines the SEXPR data structures:
+
 using System.Collections.Generic;
 
 public abstract class SExpr
@@ -42,7 +44,4 @@ public abstract class SExpr
     }
     }
 
-
-
-    // Add constructors for symbols and numbers, and cons cells later
 }

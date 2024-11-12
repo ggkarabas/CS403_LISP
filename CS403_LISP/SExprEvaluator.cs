@@ -1,3 +1,5 @@
+// implements the evaluation logic for SEXPR:
+
 public static class SExprEvaluator
 {
     private static List<SExpr> symbolList = new List<SExpr>(); 
@@ -168,7 +170,7 @@ public static class SExprEvaluator
         return functionList.Any(f => SExprUtils.Eq(f, symbol) == SExpr.Truth);
     }
 
-    // Evaluate a user-defined function call
+    // Evaluate a user defined function call
     public static SExpr EvalUserFunction(SExpr function, List<SExpr> actualArgs)
     {
         var index = functionList.FindIndex(f => SExprUtils.Eq(f, function) == SExpr.Truth);

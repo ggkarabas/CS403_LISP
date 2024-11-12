@@ -1,4 +1,6 @@
-﻿using System;
+﻿// contains testing functions for the code:
+
+using System;
 
 public class Program
 {
@@ -128,12 +130,12 @@ public class Program
     public static void TestSprint4()
     {
     // Test nil and numbers
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.Nil)));  // Should print nil
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.CreateAtom("42"))));  // Should print 42
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.Nil)));  // should print nil
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.CreateAtom("42"))));  // should print 42
 
     // Test symbols and set/lookup
     SExprEvaluator.Set(new SExpr.Atom("x"), SExpr.CreateAtom("10"));
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("x"))));  // Should print 10
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("x"))));  // should print 10
 
     // Test quote
     var quoteExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
@@ -141,7 +143,7 @@ public class Program
         new SExpr.Atom("quote"),
         new SExpr.Atom("hello")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(quoteExpr)));  // Should print hello
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(quoteExpr)));  // should print hello
 
     // Test set and lookup
     var setExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
@@ -150,8 +152,8 @@ public class Program
         new SExpr.Atom("y"),
         new SExpr.Atom("5")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(setExpr)));  // Should print 5
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("y"))));  // Should print 5
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(setExpr)));  // should print 5
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("y"))));  // should print 5
 
     // Test add
     var addExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
@@ -160,7 +162,7 @@ public class Program
         new SExpr.Atom("3"),
         new SExpr.Atom("4")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(addExpr)));  // Should print 7
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(addExpr)));  // should print 7
     }
 
     public static void TestSprint5()
@@ -172,7 +174,7 @@ public class Program
         new SExpr.Atom("1"),
         new SExpr.Atom("nil")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(andExpr)));  // Should print nil
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(andExpr)));  // should print nil
 
     var andExpr2 = new SExpr.List(new System.Collections.Generic.List<SExpr>
     {
@@ -180,7 +182,7 @@ public class Program
         new SExpr.Atom("1"),
         new SExpr.Atom("2")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(andExpr2)));  // Should print 2
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(andExpr2)));  // should print 2
 
     // Test "or"
     var orExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
@@ -189,7 +191,7 @@ public class Program
         new SExpr.Atom("nil"),
         new SExpr.Atom("2")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(orExpr)));  // Should print #t
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(orExpr)));  // should print #t
 
     var orExpr2 = new SExpr.List(new System.Collections.Generic.List<SExpr>
     {
@@ -197,7 +199,7 @@ public class Program
         new SExpr.Atom("1"),
         new SExpr.Atom("2")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(orExpr2)));  // Should print #t
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(orExpr2)));  // should print #t
 
     // Test "if"
     var ifExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
@@ -207,7 +209,7 @@ public class Program
         new SExpr.Atom("2"),
         new SExpr.Atom("3")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(ifExpr)));  // Should print 2
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(ifExpr)));  // should print 2
 
     var ifExpr2 = new SExpr.List(new System.Collections.Generic.List<SExpr>
     {
@@ -216,7 +218,7 @@ public class Program
         new SExpr.Atom("2"),
         new SExpr.Atom("3")
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(ifExpr2)));  // Should print 3
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(ifExpr2)));  // should print 3
 
     // Test "cond"
     var condExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
@@ -225,7 +227,7 @@ public class Program
         new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("nil"), new SExpr.Atom("1") }),
         new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("1"), new SExpr.Atom("2") })
     });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(condExpr)));  // Should print 2
+    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(condExpr)));  // should print 2
 }
 
     public static void TestUserDefinedFunctions()
@@ -237,14 +239,14 @@ public class Program
             new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("x") }),
             new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("add"), new SExpr.Atom("x"), new SExpr.Atom("1") })
         });
-        Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(defineFn)));  // Should print "add1"
+        Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(defineFn)));  // should print "add1"
 
         var callFn = new SExpr.List(new System.Collections.Generic.List<SExpr>
         {
             new SExpr.Atom("add1"),
             new SExpr.Atom("5")
         });
-        Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(callFn)));  // Should print "6"
+        Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(callFn)));  // should print "6"
     }
 
     private static void Check(bool condition, string testName)

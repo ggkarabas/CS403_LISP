@@ -1,8 +1,10 @@
+// utility functions and predicates for working with SEXPR:
+
 public static class SExprUtils
 {
     public static bool ToBoolean(SExpr expr)
     {
-        return expr != SExpr.Nil;  // Everything except 'Nil' is considered true
+        return expr != SExpr.Nil;  
     }
 
     public static bool IsNil(SExpr expr)
@@ -12,12 +14,12 @@ public static class SExprUtils
 
     public static bool IsSymbol(SExpr expr)
     {
-        return expr is SExpr.Atom && !int.TryParse(((SExpr.Atom)expr).Value, out _);  // Not a number, hence a symbol
+        return expr is SExpr.Atom && !int.TryParse(((SExpr.Atom)expr).Value, out _);  
     }
 
     public static bool IsNumber(SExpr expr)
     {
-        return expr is SExpr.Atom && int.TryParse(((SExpr.Atom)expr).Value, out _);  // Check if it can be parsed as an integer
+        return expr is SExpr.Atom && int.TryParse(((SExpr.Atom)expr).Value, out _); 
     }
 
     public static bool IsList(SExpr expr)
@@ -27,7 +29,7 @@ public static class SExprUtils
 
     public static SExpr Car(SExpr expr)
     {
-        if (expr is SExpr.ConsCell cons)  // Fully qualify the ConsCell reference
+        if (expr is SExpr.ConsCell cons)  
         {
             return cons.Car;
         }
@@ -36,7 +38,7 @@ public static class SExprUtils
 
     public static SExpr Cdr(SExpr expr)
     {
-        if (expr is SExpr.ConsCell cons)  // Fully qualify the ConsCell reference
+        if (expr is SExpr.ConsCell cons) 
         {
             return cons.Cdr;
         }
