@@ -3,6 +3,15 @@
 
 This project is a simple Lisp interpreter implemented in C#. It supports basic Lisp expressions, arithmetic and logic operations, conditionals, and user-defined functions. The interpreter evaluates S-expressions, handling both global and locally scoped variables.
 
+## Authors
+
+Project completed by:
+- Gabrielle Karabas
+- Cooper Olson
+- Avery Fernandez
+- Gabe Gros
+
+
 ## Features
 
 ### 1. **Basic Arithmetic Operations**
