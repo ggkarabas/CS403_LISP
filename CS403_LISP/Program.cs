@@ -4,10 +4,11 @@ using System;
 
 public class Program
 {
-    public static void Main()
+public static void Main()
     {
         Console.WriteLine("Running tests...\n");
 
+        // Existing test methods
         TestParser();
         TestPrinter();
         TestSprint2();
@@ -17,7 +18,54 @@ public class Program
         TestUserDefinedFunctions();
 
         Console.WriteLine("All tests completed.");
+
+        // Start the REPL
+        StartInteractive();
     }
+
+    // Existing test methods...
+
+    public static void StartInteractive()
+    {
+    Console.WriteLine("\nWelcome to the Lisp Interpreter. Type 'exit' to quit.");
+
+    while (true)
+    {
+        Console.Write("> ");
+        var input = Console.ReadLine();
+
+        if (input == null)
+        {
+            continue;
+        }
+
+        input = input.Trim();
+
+        if (input.ToLower() == "exit")
+        {
+            break;
+        }
+
+        try
+        {
+            // Parse the input
+            var expr = SExprParser.Parse(input);
+
+            // Evaluate the expression
+            var result = SExprEvaluator.Eval(expr);
+
+            // Print the result
+            var output = SExprPrinter.Print(result);
+            Console.WriteLine(output);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    Console.WriteLine("Goodbye!");
+}
 
     private static void TestParser()
     {
@@ -237,7 +285,7 @@ public class Program
         Check(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.CreateAtom("42"))) == "42", "Test 2: Eval number");
 
         // Test symbols and set/lookup
-        SExprEvaluator.Set("x", SExpr.CreateAtom("10"));
+    SExprEvaluator.Set("x", SExpr.CreateAtom("10"));
         Check(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("x"))) == "10", "Test 3: Eval symbol x");
 
         // Test quote

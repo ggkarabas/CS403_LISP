@@ -87,3 +87,6 @@ Testing User-Defined Functions...
 User-Defined Functions Tests Completed.
 
 All tests completed.
+
+Welcome to the Lisp Interpreter. Type 'exit' to quit.
+> 
