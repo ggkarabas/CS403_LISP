@@ -1,21 +1,22 @@
-﻿// contains testing functions for the code:
-
-using System;
+﻿using System;
 
 public class Program
 {
-
     public static void Main()
     {
         Console.WriteLine("Running tests...");
 
+
         TestParser();
+
+
         TestPrinter();
+
+
         TestSprint2();
-        TestSprint3();
-        TestSprint4();
-        TestSprint5();
-        TestUserDefinedFunctions();
+
+
+        TestSprint3();  // Add this line
 
         Console.WriteLine("All tests completed.");
     }
@@ -126,127 +127,6 @@ public class Program
     Console.WriteLine(SExprPrinter.Print(SExprUtils.Not(SExpr.Truth)));  // nil
     }
 
-    public static void TestSprint4()
-    {
-    // Test nil and numbers
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.Nil)));  // should print nil
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(SExpr.CreateAtom("42"))));  // should print 42
-
-    // Test symbols and set/lookup
-    SExprEvaluator.Set(new SExpr.Atom("x"), SExpr.CreateAtom("10"));
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("x"))));  // should print 10
-
-    // Test quote
-    var quoteExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("quote"),
-        new SExpr.Atom("hello")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(quoteExpr)));  // should print hello
-
-    // Test set and lookup
-    var setExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("set"),
-        new SExpr.Atom("y"),
-        new SExpr.Atom("5")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(setExpr)));  // should print 5
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(new SExpr.Atom("y"))));  // should print 5
-
-    // Test add
-    var addExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("add"),
-        new SExpr.Atom("3"),
-        new SExpr.Atom("4")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(addExpr)));  // should print 7
-    }
-
-    public static void TestSprint5()
-{
-    // Test "and" (short-circuit)
-    var andExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("and"),
-        new SExpr.Atom("1"),
-        new SExpr.Atom("nil")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(andExpr)));  // should print nil
-
-    var andExpr2 = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("and"),
-        new SExpr.Atom("1"),
-        new SExpr.Atom("2")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(andExpr2)));  // should print 2
-
-    // Test "or"
-    var orExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("or"),
-        new SExpr.Atom("nil"),
-        new SExpr.Atom("2")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(orExpr)));  // should print #t
-
-    var orExpr2 = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("or"),
-        new SExpr.Atom("1"),
-        new SExpr.Atom("2")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(orExpr2)));  // should print #t
-
-    // Test "if"
-    var ifExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("if"),
-        new SExpr.Atom("1"),
-        new SExpr.Atom("2"),
-        new SExpr.Atom("3")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(ifExpr)));  // should print 2
-
-    var ifExpr2 = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("if"),
-        new SExpr.Atom("nil"),
-        new SExpr.Atom("2"),
-        new SExpr.Atom("3")
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(ifExpr2)));  // should print 3
-
-    // Test "cond"
-    var condExpr = new SExpr.List(new System.Collections.Generic.List<SExpr>
-    {
-        new SExpr.Atom("cond"),
-        new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("nil"), new SExpr.Atom("1") }),
-        new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("1"), new SExpr.Atom("2") })
-    });
-    Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(condExpr)));  // should print 2
-}
-
-    public static void TestUserDefinedFunctions()
-    {
-        var defineFn = new SExpr.List(new System.Collections.Generic.List<SExpr>
-        {
-            new SExpr.Atom("fn"),
-            new SExpr.Atom("add1"),
-            new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("x") }),
-            new SExpr.List(new System.Collections.Generic.List<SExpr> { new SExpr.Atom("add"), new SExpr.Atom("x"), new SExpr.Atom("1") })
-        });
-        Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(defineFn)));  // should print "add1"
-
-        var callFn = new SExpr.List(new System.Collections.Generic.List<SExpr>
-        {
-            new SExpr.Atom("add1"),
-            new SExpr.Atom("5")
-        });
-        Console.WriteLine(SExprPrinter.Print(SExprEvaluator.Eval(callFn)));  // should print "6"
-    }
 
     private static void Check(bool condition, string testName)
     {

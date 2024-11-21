@@ -1,0 +1,48 @@
+Running tests...
+Testing Parser...
+[PASS] Test 1: Parse single atom
+[PASS] Test 2: Parse simple list
+[PASS] Test 3: Parse nested list
+Parser Tests Completed.
+
+Testing Printer...
+[PASS] Test 1: Print single atom
+[PASS] Test 2: Print simple list
+[PASS] Test 3: Print nested list
+Printer Tests Completed.
+
+SExpr+Atom
+SExpr+Atom
+symbol
+411
+(one . (two . (three)))
+5
+1
+6
+2
+2
+#t
+#t
+#t
+#t
+#t
+nil
+#t
+nil
+nil
+42
+10
+hello
+5
+5
+7
+nil
+2
+#t
+#t
+2
+2
+1
+add1
+6
+All tests completed.

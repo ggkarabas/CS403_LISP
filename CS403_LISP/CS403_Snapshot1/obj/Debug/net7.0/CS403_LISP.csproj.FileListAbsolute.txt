@@ -1,0 +1,15 @@
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/CS403_LISP.csproj.AssemblyReference.cache
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/CS403_LISP.GeneratedMSBuildEditorConfig.editorconfig
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/CS403_LISP.AssemblyInfoInputs.cache
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/CS403_LISP.AssemblyInfo.cs
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/CS403_LISP.csproj.CoreCompileInputs.cache
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/bin/Debug/net7.0/CS403_LISP
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/bin/Debug/net7.0/CS403_LISP.deps.json
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/bin/Debug/net7.0/CS403_LISP.runtimeconfig.json
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/bin/Debug/net7.0/CS403_LISP.dll
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/bin/Debug/net7.0/CS403_LISP.pdb
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/CS403_LISP.dll
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/refint/CS403_LISP.dll
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/CS403_LISP.pdb
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/CS403_LISP.genruntimeconfig.cache
+/home/ggkarabas/Desktop/CS403/CS403_LISP/CS403_LISP/obj/Debug/net7.0/ref/CS403_LISP.dll
