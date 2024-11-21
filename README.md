@@ -89,13 +89,13 @@ This project is a simple Lisp interpreter implemented in C#. It supports basic L
 ## How to Build and Run
 
 ### Prerequisites
-- .NET SDK (version 6.0 or higher)
+- .NET SDK 
 
 ### Build
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-repo/lisp-interpreter.git
-   cd lisp-interpreter
+   git clone https://github.com/ggkarabas/CS403_LISP.git
+   cd CS403_LISP
    ```
 2. Build the project:
    ```bash
