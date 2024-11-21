@@ -1,26 +1,27 @@
+
 # Lisp Interpreter
 
-This project is a simple Lisp interpreter implemented in C#. It supports basic Lisp expressions, arithmetic and logic operations, conditional statements, and user-defined functions. The interpreter evaluates S-expressions and can handle both global variables and locally scoped variables through function calls.
+This project is a simple Lisp interpreter implemented in C#. It supports basic Lisp expressions, arithmetic and logic operations, conditionals, and user-defined functions. The interpreter evaluates S-expressions, handling both global and locally scoped variables.
 
 ## Features
 
 ### 1. **Basic Arithmetic Operations**
    - Supported operations:
-     - Addition: `(add x y)`
-     - Subtraction: `(sub x y)`
-     - Multiplication: `(mul x y)`
-     - Division: `(div x y)`
-     - Modulo: `(mod x y)`
+     - **Addition**: `(add x y)`
+     - **Subtraction**: `(sub x y)`
+     - **Multiplication**: `(mul x y)`
+     - **Division**: `(div x y)`
+     - **Modulo**: `(mod x y)`
 
 ### 2. **Logic Operations**
    - Supported operations:
-     - `and`: `(and e1 e2)`
-     - `or`: `(or e1 e2)`
-     - `not`: `(not e)`
+     - **And**: `(and e1 e2)`
+     - **Or**: `(or e1 e2)`
+     - **Not**: `(not e)`
 
 ### 3. **Conditionals**
-   - **if**: `(if condition true-branch false-branch)`
-   - **cond**: 
+   - **If Statement**: `(if condition true-branch false-branch)`
+   - **Cond Statement**: 
      ```lisp
      (cond
        (condition1 result1)
@@ -30,17 +31,95 @@ This project is a simple Lisp interpreter implemented in C#. It supports basic L
      ```
 
 ### 4. **User-Defined Functions**
-   - Define a function: `(fn fname (arg0 arg1 ... argn) body)`
-   - Call a function: `(fname arg0 arg1 ... argn)`
-   - Local environments are supported via an environment stack, enabling correct scoping of variables within functions.
+   - **Define a function**: `(fn fname (arg0 arg1 ... argn) body)`
+   - **Call a function**: `(fname arg0 arg1 ... argn)`
+   - Local environments are supported via an environment stack, ensuring correct scoping within functions.
 
 ### 5. **S-Expression Parsing and Evaluation**
-   - This interpreter parses and evaluates S-expressions, supporting symbols, lists, and basic quoting with `quote`.
+   - This interpreter parses and evaluates S-expressions, handling:
+     - **Symbols**
+     - **Lists**
+     - **Quoting**: `(quote expr)` or `'(expr)`
+
+### 6. **Variables**
+   - **Set a variable**: `(set name value)`
+   - **Retrieve a variable**: Refer to the variable name directly (e.g., `name`).
+
+### 7. **Error Handling**
+   - Handles malformed S-expressions and runtime errors such as division by zero.
 
 ## Example Usage
 
-### Define and Use a Function
-
+### Arithmetic and Logic
 ```lisp
-(fn add1 (x) (add x 1))  ; Defines a function `add1` that adds 1 to its argument
-(add1 5)                 ; Returns 6
+(add 2 3)             ; Returns 5
+(sub 7 4)             ; Returns 3
+(mul 3 4)             ; Returns 12
+(div 8 2)             ; Returns 4
+(and 1 nil)           ; Returns nil
+(not nil)             ; Returns #t
+```
+
+### Conditional Statements
+```lisp
+(if (lt 3 5) 1 0)     ; Returns 1
+(cond
+  ((lt 3 2) "No")
+  ((eq 3 3) "Yes"))    ; Returns "Yes"
+```
+
+### Functions
+```lisp
+(fn square (x) (mul x x))  ; Defines a function `square`
+(square 4)                 ; Returns 16
+
+(fn fib (n)
+  (if (lt n 2) 
+      1 
+      (add (fib (sub n 1)) (fib (sub n 2)))))  ; Defines Fibonacci
+(fib 10)                   ; Returns 55
+```
+
+### Variables
+```lisp
+(set x 10)          ; Sets `x` to 10
+(add x 5)           ; Returns 15
+```
+
+## How to Build and Run
+
+### Prerequisites
+- .NET SDK (version 6.0 or higher)
+
+### Build
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-repo/lisp-interpreter.git
+   cd lisp-interpreter
+   ```
+2. Build the project:
+   ```bash
+   dotnet build
+   ```
+
+### Run
+1. Execute the program:
+   ```bash
+   dotnet run
+   ```
+2. Follow the on-screen prompts to input Lisp expressions.
+
+### Testing
+- The `Program.cs` file includes predefined tests for core functionality. To run the tests:
+   ```bash
+   dotnet run
+   ```
+
+## File Structure
+- `SExpr.cs`: Defines the S-expression data structures.
+- `SExprParser.cs`: Implements the parser for S-expressions.
+- `SExprPrinter.cs`: Converts S-expressions back into string form.
+- `SExprUtils.cs`: Provides utility functions for working with S-expressions.
+- `SExprEvaluator.cs`: Implements the evaluation logic.
+- `Program.cs`: Includes test cases and a main entry point for running the interpreter.
+
