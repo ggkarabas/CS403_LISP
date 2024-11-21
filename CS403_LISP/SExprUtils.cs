@@ -79,17 +79,26 @@ public static class SExprUtils
         int divisor = GetNumberValue(b);
         if (divisor == 0)
         {
-            throw new DivideByZeroException("Division by zero");
+            // Return "undefined" when dividing by zero
+            return new SExpr.Atom("undefined");
         }
         int result = GetNumberValue(a) / divisor;
         return new SExpr.Atom(result.ToString());
     }
 
+
     public static SExpr Mod(SExpr a, SExpr b)
     {
-        int result = GetNumberValue(a) % GetNumberValue(b);
+        int divisor = GetNumberValue(b);
+        if (divisor == 0)
+        {
+            // Return "undefined" when modulo by zero
+            return new SExpr.Atom("undefined");
+        }
+        int result = GetNumberValue(a) % divisor;
         return new SExpr.Atom(result.ToString());
     }
+
 
     // Relational operations
     public static SExpr Lt(SExpr a, SExpr b)

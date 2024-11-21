@@ -1,190 +1,273 @@
-// implements the evaluation logic for SEXPR:
+// Implements the evaluation logic for S-Expressions:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public static class SExprEvaluator
 {
-    private static List<SExpr> symbolList = new List<SExpr>(); 
-    private static List<SExpr> valueList = new List<SExpr>(); 
+    // The global environment contains both variables and functions.
+    private static Dictionary<string, SExpr> GlobalEnvironment = new Dictionary<string, SExpr>();
 
-    // lists for user-defined functions
-    private static List<SExpr> functionList = new List<SExpr>();  
-    private static List<SExpr> functionArgsList = new List<SExpr>(); 
-    private static List<SExpr> functionBodyList = new List<SExpr>(); 
-
-    private static Stack<(List<SExpr> symbols, List<SExpr> values)> envStack = new Stack<(List<SExpr>, List<SExpr>)>();
-
-    public static SExpr Eval(SExpr expr)
+    // Set of built-in function names
+    private static readonly HashSet<string> BuiltInFunctions = new HashSet<string>
     {
-        if (expr == SExpr.Nil || SExprUtils.IsNumber(expr))
+        "add", "sub", "mul", "div", "mod",
+        "lt", "gt", "lte", "gte", "eq", "not"
+        // Note: 'and' and 'or' are handled as special forms
+    };
+
+    public static SExpr Eval(SExpr expr, Dictionary<string, SExpr>? env = null)
+    {
+        env = env ?? GlobalEnvironment;
+
+        if (expr == SExpr.Nil || expr == SExpr.Truth || SExprUtils.IsNumber(expr))
         {
             return expr;
         }
 
-        if (SExprUtils.IsSymbol(expr))
+        if (expr is SExpr.Atom atom)
         {
-            return Lookup(expr);
+            // Handle special atoms 'nil' and '#t'
+            if (atom.Value == "nil")
+            {
+                return SExpr.Nil;
+            }
+            else if (atom.Value == "#t")
+            {
+                return SExpr.Truth;
+            }
+            else
+            {
+                return Lookup(expr, env);
+            }
         }
 
         if (SExprUtils.IsList(expr))
         {
             var list = expr as SExpr.List;
-            var function = Eval(list.Elements[0]);
+            var firstElem = list.Elements[0];
 
-            // Handle "quote"
-            if (SExprUtils.Eq(function, new SExpr.Atom("quote")) == SExpr.Truth)
+            // Special forms are not evaluated
+            if (firstElem is SExpr.Atom opAtom)
             {
-                return list.Elements[1];  
-            }
+                var op = opAtom.Value;
 
-            // Handle "set"
-            if (SExprUtils.Eq(function, new SExpr.Atom("set")) == SExpr.Truth)
-            {
-                var name = list.Elements[1];
-                var value = Eval(list.Elements[2]);
-                Set(name, value);
-                return value;
-            }
-
-            if (SExprUtils.Eq(function, new SExpr.Atom("fn")) == SExpr.Truth)
-            {
-                var fname = list.Elements[1];  
-                var args = list.Elements[2];   
-                var body = list.Elements[3];  
-
-                SetFunction(fname, args, body);
-                return fname;  // Return the function name as confirmation
-            }
-
-            if (SExprUtils.Eq(function, new SExpr.Atom("add")) == SExpr.Truth)
-            {
-                return SExprUtils.Add(Eval(list.Elements[1]), Eval(list.Elements[2]));
-            }
-            if (SExprUtils.Eq(function, new SExpr.Atom("sub")) == SExpr.Truth)
-            {
-                return SExprUtils.Sub(Eval(list.Elements[1]), Eval(list.Elements[2]));
-            }
-            if (SExprUtils.Eq(function, new SExpr.Atom("mul")) == SExpr.Truth)
-            {
-                return SExprUtils.Mul(Eval(list.Elements[1]), Eval(list.Elements[2]));
-            }
-            if (SExprUtils.Eq(function, new SExpr.Atom("div")) == SExpr.Truth)
-            {
-                return SExprUtils.Div(Eval(list.Elements[1]), Eval(list.Elements[2]));
-            }
-            if (SExprUtils.Eq(function, new SExpr.Atom("mod")) == SExpr.Truth)
-            {
-                return SExprUtils.Mod(Eval(list.Elements[1]), Eval(list.Elements[2]));
-            }
-
-            if (SExprUtils.Eq(function, new SExpr.Atom("and")) == SExpr.Truth)
-            {
-                return Eval(list.Elements[1]) == SExpr.Nil ? SExpr.Nil : Eval(list.Elements[2]);
-            }
-            if (SExprUtils.Eq(function, new SExpr.Atom("or")) == SExpr.Truth)
-            {
-                return Eval(list.Elements[1]) != SExpr.Nil ? SExpr.Truth : Eval(list.Elements[2]);
-            }
-            if (SExprUtils.Eq(function, new SExpr.Atom("not")) == SExpr.Truth)
-            {
-                return SExprUtils.Not(Eval(list.Elements[1]));
-            }
-
-            // Handle "if"
-            if (SExprUtils.Eq(function, new SExpr.Atom("if")) == SExpr.Truth)
-            {
-                var condition = Eval(list.Elements[1]);
-                if (condition != SExpr.Nil)
+                switch (op)
                 {
-                    return Eval(list.Elements[2]);
-                }
-                else
-                {
-                    return Eval(list.Elements[3]);
+                    case "quote":
+                        return list.Elements[1];
+
+                    case "set":
+                        var name = (list.Elements[1] as SExpr.Atom)?.Value;
+                        if (name == null)
+                            throw new ArgumentException("Invalid variable name");
+                        var value = Eval(list.Elements[2], env);
+                        env[name] = value;
+                        return value;
+
+                    case "fn":
+                        var funcName = (list.Elements[1] as SExpr.Atom)?.Value;
+                        var paramElements = (list.Elements[2] as SExpr.List)?.Elements;
+                        if (funcName == null || paramElements == null)
+                            throw new ArgumentException("Invalid function definition");
+
+                        var parameters = new List<string>();
+                        foreach (var param in paramElements)
+                        {
+                            if (param is SExpr.Atom paramAtom)
+                            {
+                                parameters.Add(paramAtom.Value);
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Function parameters must be atoms");
+                            }
+                        }
+                        var body = list.Elements[3];
+
+                        var function = new SExpr.UserFunction
+                        {
+                            Parameters = parameters,
+                            Body = body,
+                            Environment = new Dictionary<string, SExpr>(env)
+                        };
+
+                        // Add the function to its own environment for recursion
+                        function.Environment[funcName] = function;
+
+                        env[funcName] = function;
+                        return new SExpr.Atom(funcName);
+
+
+                    case "if":
+                        var condition = Eval(list.Elements[1], env);
+                        if (SExprUtils.ToBoolean(condition))
+                        {
+                            return Eval(list.Elements[2], env);
+                        }
+                        else
+                        {
+                            return Eval(list.Elements[3], env);
+                        }
+
+                    case "cond":
+                        foreach (var clause in list.Elements.Skip(1))
+                        {
+                            if (clause is SExpr.List clauseList && clauseList.Elements.Count == 2)
+                            {
+                                var testExpr = clauseList.Elements[0];
+                                var resultExpr = clauseList.Elements[1];
+
+                                if (SExprUtils.ToBoolean(Eval(testExpr, env)))
+                                {
+                                    return Eval(resultExpr, env);
+                                }
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Invalid cond clause");
+                            }
+                        }
+                        return SExpr.Nil;
+
+                    case "and":
+                        SExpr lastResult = SExpr.Truth;
+                        foreach (var arg in list.Elements.Skip(1))
+                        {
+                            var result = Eval(arg, env);
+                            if (!SExprUtils.ToBoolean(result))
+                            {
+                                return SExpr.Nil;
+                            }
+                            lastResult = result;
+                        }
+                        return lastResult;
+
+
+                    case "or":
+                        foreach (var arg in list.Elements.Skip(1))
+                        {
+                            var result = Eval(arg, env);
+                            if (SExprUtils.ToBoolean(result))
+                            {
+                                return result;
+                            }
+                        }
+                        return SExpr.Nil;
+
+                    default:
+                        // Handle built-in functions
+                        if (IsBuiltInFunction(op))
+                        {
+                            var args = list.Elements.Skip(1).Select(arg => Eval(arg, env)).ToList();
+                            return ApplyBuiltInFunction(op, args);
+                        }
+                        else if (env.ContainsKey(op))
+                        {
+                            var func = env[op];
+                            if (func is SExpr.UserFunction userFunc)
+                            {
+                                var args = list.Elements.Skip(1).Select(arg => Eval(arg, env)).ToList();
+                                return EvalUserFunction(userFunc, args);
+                            }
+                            else
+                            {
+                                throw new ArgumentException($"Symbol {op} is not a function");
+                            }
+                        }
+                        else
+                        {
+                            throw new ArgumentException($"Undefined function: {op}");
+                        }
                 }
             }
-
-            // Handle "cond"
-            if (SExprUtils.Eq(function, new SExpr.Atom("cond")) == SExpr.Truth)
+            else
             {
-                for (int i = 1; i < list.Elements.Count; i++)
-                {
-                    var clause = list.Elements[i] as SExpr.List;
-                    var condition = Eval(clause.Elements[0]);
-                    if (condition != SExpr.Nil)
-                    {
-                        return Eval(clause.Elements[1]);
-                    }
-                }
-                return SExpr.Nil;
-            }
-
-            if (IsFunction(function))
-            {
-                return EvalUserFunction(function, list.Elements.Skip(1).ToList());
+                throw new ArgumentException("Invalid function call");
             }
         }
 
         throw new ArgumentException("Undefined behavior");
     }
 
-    // Lookup for variables and function arguments
-    public static SExpr Lookup(SExpr symbol)
+    private static bool IsBuiltInFunction(string op)
     {
-        if (envStack.Count > 0)
+        return BuiltInFunctions.Contains(op);
+    }
+
+    private static SExpr ApplyBuiltInFunction(string op, List<SExpr> args)
+    {
+        switch (op)
         {
-            var (symbols, values) = envStack.Peek();
-            for (int i = 0; i < symbols.Count; i++)
-            {
-                if (SExprUtils.Eq(symbols[i], symbol) == SExpr.Truth)
-                {
-                    return values[i];
-                }
-            }
+            case "add":
+                return SExprUtils.Add(args[0], args[1]);
+            case "sub":
+                return SExprUtils.Sub(args[0], args[1]);
+            case "mul":
+                return SExprUtils.Mul(args[0], args[1]);
+            case "div":
+                return SExprUtils.Div(args[0], args[1]);
+            case "mod":
+                return SExprUtils.Mod(args[0], args[1]);
+            case "lt":
+                return SExprUtils.Lt(args[0], args[1]);
+            case "gt":
+                return SExprUtils.Gt(args[0], args[1]);
+            case "lte":
+                return SExprUtils.Lte(args[0], args[1]);
+            case "gte":
+                return SExprUtils.Gte(args[0], args[1]);
+            case "eq":
+                return SExprUtils.Eq(args[0], args[1]);
+            case "not":
+                return SExprUtils.Not(args[0]);
+            default:
+                throw new ArgumentException($"Unknown built-in function: {op}");
+        }
+    }
+
+    public static SExpr EvalUserFunction(SExpr.UserFunction func, List<SExpr> args)
+    {
+        if (func.Parameters.Count != args.Count)
+            throw new ArgumentException("Argument count mismatch");
+
+        // Create a new environment for the function call
+        var localEnv = new Dictionary<string, SExpr>(func.Environment);
+
+        // Bind parameters to arguments
+        for (int i = 0; i < func.Parameters.Count; i++)
+        {
+            localEnv[func.Parameters[i]] = args[i];
         }
 
-        for (int i = 0; i < symbolList.Count; i++)
+        // Evaluate the function body in the new environment
+        return Eval(func.Body, localEnv);
+    }
+
+    public static SExpr Lookup(SExpr expr, Dictionary<string, SExpr> env)
+    {
+        if (expr is SExpr.Atom atom)
         {
-            if (SExprUtils.Eq(symbolList[i], symbol) == SExpr.Truth)
+            var name = atom!.Value;
+            if (env.ContainsKey(name))
             {
-                return valueList[i];
+                return env[name];
+            }
+            else
+            {
+                throw new ArgumentException($"Undefined symbol: {name}");
             }
         }
-
-        return symbol;  
+        else
+        {
+            throw new ArgumentException("Invalid symbol");
+        }
     }
 
-    public static void Set(SExpr symbol, SExpr value)
+    // Add the Set method
+    public static void Set(string name, SExpr value)
     {
-        symbolList.Add(symbol);
-        valueList.Add(value);
-    }
-
-    public static void SetFunction(SExpr fname, SExpr args, SExpr body)
-    {
-        functionList.Add(fname);
-        functionArgsList.Add(args);
-        functionBodyList.Add(body);
-    }
-
-    public static bool IsFunction(SExpr symbol)
-    {
-        return functionList.Any(f => SExprUtils.Eq(f, symbol) == SExpr.Truth);
-    }
-
-    // Evaluate a user defined function call
-    public static SExpr EvalUserFunction(SExpr function, List<SExpr> actualArgs)
-    {
-        var index = functionList.FindIndex(f => SExprUtils.Eq(f, function) == SExpr.Truth);
-        var formalArgs = functionArgsList[index] as SExpr.List;
-        var body = functionBodyList[index];
-
-        var values = actualArgs.Select(arg => Eval(arg)).ToList();
-
-        envStack.Push((formalArgs.Elements, values));
-
-        var result = Eval(body);
-
-        envStack.Pop();
-
-        return result;
+        GlobalEnvironment[name] = value;
     }
 }

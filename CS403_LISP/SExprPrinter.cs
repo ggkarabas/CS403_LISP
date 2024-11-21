@@ -1,40 +1,72 @@
-// print function to convert an SEXPR AST back into a string representation:
+// SExprPrinter.cs
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 public static class SExprPrinter
 {
     public static string Print(SExpr expr)
     {
-        switch (expr)
+        if (expr == SExpr.Nil)
         {
-            case SExpr.Atom atom:
-                return atom.Value;
-            case SExpr.List list:
-                StringBuilder sb = new StringBuilder();
-                sb.Append("(");
-                for (int i = 0; i < list.Elements.Count; i++)
+            return "nil";
+        }
+        else if (expr == SExpr.Truth)
+        {
+            return "#t";
+        }
+        else if (expr is SExpr.Atom atom)
+        {
+            return atom.Value;
+        }
+        else if (expr is SExpr.List list)
+        {
+            var elements = list.Elements.Select(Print);
+            return $"({string.Join(" ", elements)})";
+        }
+        else if (expr is SExpr.ConsCell cons)
+        {
+            return PrintConsCell(cons);
+        }
+        else
+        {
+            throw new Exception("Unknown SExpr type");
+        }
+    }
+
+    private static string PrintConsCell(SExpr expr)
+    {
+        var sb = new StringBuilder();
+        sb.Append('(');
+        PrintConsCellRecursive(expr, sb);
+        sb.Append(')');
+        return sb.ToString();
+    }
+
+    private static void PrintConsCellRecursive(SExpr expr, StringBuilder sb)
+    {
+        if (expr is SExpr.ConsCell cons)
+        {
+            sb.Append(Print(cons.Car));
+            if (cons.Cdr != SExpr.Nil)
+            {
+                if (cons.Cdr is SExpr.ConsCell)
                 {
-                    if (i > 0) sb.Append(" ");
-                    sb.Append(Print(list.Elements[i]));
+                    sb.Append(' ');
+                    PrintConsCellRecursive(cons.Cdr, sb);
                 }
-                sb.Append(")");
-                return sb.ToString();
-            case SExpr.ConsCell cons:
-                StringBuilder consSb = new StringBuilder();
-                consSb.Append("(");
-                consSb.Append(Print(cons.Car));
-                var cdr = cons.Cdr;
-                if (cdr != SExpr.Nil)
+                else
                 {
-                    consSb.Append(" . ");
-                    consSb.Append(Print(cdr));
+                    sb.Append(" . ");
+                    sb.Append(Print(cons.Cdr));
                 }
-                consSb.Append(")");
-                return consSb.ToString();
-            default:
-                throw new ArgumentException("Unknown S-Expression type");
+            }
+        }
+        else
+        {
+            sb.Append(Print(expr));
         }
     }
 }

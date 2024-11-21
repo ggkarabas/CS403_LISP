@@ -1,4 +1,4 @@
-// implements an SEXPR parser:
+// Implements an S-Expression parser:
 
 using System;
 using System.Collections.Generic;
@@ -16,21 +16,61 @@ public static class SExprParser
     {
         Queue<string> tokens = new Queue<string>();
         int i = 0;
-        while (i < input.Length)
+        int length = input.Length;
+
+        while (i < length)
         {
             if (char.IsWhiteSpace(input[i]))
             {
                 i++;
+            }
+            else if (input[i] == ';')
+            {
+                // Skip the rest of the line (handle comments)
+                while (i < length && input[i] != '\n')
+                {
+                    i++;
+                }
             }
             else if (input[i] == '(' || input[i] == ')')
             {
                 tokens.Enqueue(input[i].ToString());
                 i++;
             }
+            else if (input[i] == '"')
+            {
+                // Handle string literals
+                StringBuilder sb = new StringBuilder();
+                sb.Append(input[i]); // Append the opening quote
+                i++;
+                while (i < length)
+                {
+                    if (input[i] == '"')
+                    {
+                        sb.Append(input[i]); // Append the closing quote
+                        i++;
+                        break;
+                    }
+                    else if (input[i] == '\\' && i + 1 < length)
+                    {
+                        // Handle escape sequences
+                        sb.Append(input[i]);
+                        i++;
+                        sb.Append(input[i]);
+                        i++;
+                    }
+                    else
+                    {
+                        sb.Append(input[i]);
+                        i++;
+                    }
+                }
+                tokens.Enqueue(sb.ToString());
+            }
             else
             {
                 StringBuilder sb = new StringBuilder();
-                while (i < input.Length && !char.IsWhiteSpace(input[i]) && input[i] != '(' && input[i] != ')')
+                while (i < length && !char.IsWhiteSpace(input[i]) && input[i] != '(' && input[i] != ')' && input[i] != ';')
                 {
                     sb.Append(input[i]);
                     i++;
@@ -49,9 +89,13 @@ public static class SExprParser
         if (token == "(")
         {
             List<SExpr> elements = new List<SExpr>();
-            while (tokens.Peek() != ")")
+            while (tokens.Count > 0 && tokens.Peek() != ")")
             {
                 elements.Add(ParseTokens(tokens));
+            }
+            if (tokens.Count == 0)
+            {
+                throw new ArgumentException("Missing closing parenthesis");
             }
             tokens.Dequeue();  // Remove the ')'
             return new SExpr.List(elements);

@@ -1,48 +1,89 @@
 Running tests...
+
 Testing Parser...
+
 [PASS] Test 1: Parse single atom
 [PASS] Test 2: Parse simple list
 [PASS] Test 3: Parse nested list
+[PASS] Test 4: Parse empty list
+[PASS] Test 5: Parse deeply nested lists
+[PASS] Test 6: Parse multiple lists (should parse first list)
+[PASS] Test 7: Parse atom with special characters
+[PASS] Test 8: Parse string literal
+[PASS] Test 9: Correctly failed on incomplete input
+[PASS] Test 10: Parse list with comment
 Parser Tests Completed.
 
 Testing Printer...
+
 [PASS] Test 1: Print single atom
 [PASS] Test 2: Print simple list
 [PASS] Test 3: Print nested list
+[PASS] Test 4: Print empty list
+[PASS] Test 5: Print deeply nested list
+[PASS] Test 6: Print atom with special characters
+[PASS] Test 7: Print string literal
 Printer Tests Completed.
 
-SExpr+Atom
-SExpr+Atom
-symbol
-411
-(one . (two . (three)))
-5
-1
-6
-2
-2
-#t
-#t
-#t
-#t
-#t
-nil
-#t
-nil
-nil
-42
-10
-hello
-5
-5
-7
-nil
-2
-#t
-#t
-2
-2
-1
-add1
-6
+Testing Sprint 2...
+
+[PASS] Test 1: Print nil
+[PASS] Test 2: Print truth
+[PASS] Test 3: Print symbol atom
+[PASS] Test 4: Print number atom
+[PASS] Test 5: Print cons cell
+[PASS] Test 6: Print nested cons cells
+Sprint 2 Tests Completed.
+
+Testing Sprint 3...
+
+[PASS] Test 1: Addition
+[PASS] Test 2: Subtraction
+[PASS] Test 3: Multiplication
+[PASS] Test 4: Division
+[PASS] Test 5: Modulo
+[PASS] Test 6: Addition with negative numbers
+[PASS] Test 7: Division by zero
+[PASS] Test 8: Less than
+[PASS] Test 9: Greater than
+[PASS] Test 10: Less than or equal
+[PASS] Test 11: Greater than or equal
+[PASS] Test 12: Equality true
+[PASS] Test 13: Equality false
+[PASS] Test 14: Not nil
+[PASS] Test 15: Not truth
+Sprint 3 Tests Completed.
+
+Testing Sprint 4...
+
+[PASS] Test 1: Eval nil
+[PASS] Test 2: Eval number
+[PASS] Test 3: Eval symbol x
+[PASS] Test 4: Eval quote
+[PASS] Test 5: Set y to 5
+[PASS] Test 6: Eval symbol y
+[PASS] Test 7: Eval add 3 4
+[PASS] Test 8: Correctly failed on undefined symbol
+Sprint 4 Tests Completed.
+
+Testing Sprint 5...
+
+[PASS] Test 1: And with nil
+[PASS] Test 2: And with all true
+[PASS] Test 3: Or with second true
+[PASS] Test 4: Or with first true
+[PASS] Test 5: If condition true
+[PASS] Test 6: If condition false
+[PASS] Test 7: Cond evaluates to 2
+[PASS] Test 8: Cond evaluates to 3
+Sprint 5 Tests Completed.
+
+Testing User-Defined Functions...
+
+[PASS] Test 1: Define function add1
+[PASS] Test 2: Call function add1(5)
+[PASS] Test 3: Define recursive function fact
+[PASS] Test 4: Call function fact(5)
+User-Defined Functions Tests Completed.
+
 All tests completed.
