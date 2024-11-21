@@ -102,7 +102,7 @@ The output.txt file will include the output for the successful test run.
 
 ### Prerequisites
 - .NET SDK v7.0
--- https://dotnet.microsoft.com/en-us/download/dotnet/7.0/runtime?cid=getdotnetcore&os=windows&arch=x64
+- https://dotnet.microsoft.com/en-us/download/dotnet/7.0/runtime?cid=getdotnetcore&os=windows&arch=x64
 
 ### Build
 1. Clone this repository:
