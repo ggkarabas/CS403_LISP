@@ -11,6 +11,9 @@ Project completed by:
 - Avery Fernandez
 - Gabe Gros
 
+## Authors
+
+The output.txt file will include the output for the successful test run. 
 
 ## Features
 
