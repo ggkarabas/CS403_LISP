@@ -101,13 +101,14 @@ The output.txt file will include the output for the successful test run.
 ## How to Build and Run
 
 ### Prerequisites
-- .NET SDK 
+- .NET SDK v7.0
+  https://dotnet.microsoft.com/en-us/download/dotnet/7.0/runtime?cid=getdotnetcore&os=windows&arch=x64
 
 ### Build
 1. Clone this repository:
    ```bash
    git clone https://github.com/ggkarabas/CS403_LISP.git
-   cd CS403_LISP
+   cd CS403_LISP/CS403_LISP
    ```
 2. Build the project:
    ```bash
