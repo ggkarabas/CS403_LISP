@@ -107,8 +107,7 @@ This project is a simple Lisp interpreter implemented in C#. It supports basic L
    ```bash
    dotnet run
    ```
-2. Follow the on-screen prompts to input Lisp expressions.
-
+   
 ### Testing
 - The `Program.cs` file includes predefined tests for core functionality. To run the tests:
    ```bash
