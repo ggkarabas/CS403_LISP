@@ -11,7 +11,7 @@ Project completed by:
 - Avery Fernandez
 - Gabe Gros
 
-## Authors
+## Output Information
 
 The output.txt file will include the output for the successful test run. 
 
@@ -102,7 +102,7 @@ The output.txt file will include the output for the successful test run.
 
 ### Prerequisites
 - .NET SDK v7.0
-  - https://dotnet.microsoft.com/en-us/download/dotnet/7.0/runtime?cid=getdotnetcore&os=windows&arch=x64
+  - [Download Here](https://dotnet.microsoft.com/en-us/download/dotnet/7.0/runtime?cid=getdotnetcore&os=windows&arch=x64)
 
 ### Build
 1. Clone this repository:
@@ -116,11 +116,30 @@ The output.txt file will include the output for the successful test run.
    ```
 
 ### Run
-1. Execute the program:
+#### Windows
+1. Navigate to the `publish` folder for the Windows build:
    ```bash
-   dotnet run
+   cd /path/to/CS403_LISP/bin/Release/net7.0/win-x64/publish/
    ```
-   
+2. Execute the program:
+   ```bash
+   ./CS403_LISP.exe
+   ```
+
+#### Linux
+1. Navigate to the `publish` folder for the Linux build:
+   ```bash
+   cd /path/to/CS403_LISP/bin/Release/net7.0/linux-x64/publish/
+   ```
+2. Make the binary executable:
+   ```bash
+   chmod +x CS403_LISP
+   ```
+3. Run the binary:
+   ```bash
+   ./CS403_LISP
+   ```
+
 ### Testing
 - The `Program.cs` file includes predefined tests for core functionality. To run the tests:
    ```bash
@@ -134,4 +153,3 @@ The output.txt file will include the output for the successful test run.
 - `SExprUtils.cs`: Provides utility functions for working with S-expressions.
 - `SExprEvaluator.cs`: Implements the evaluation logic.
 - `Program.cs`: Includes test cases and a main entry point for running the interpreter.
-
