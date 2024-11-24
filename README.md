@@ -99,31 +99,31 @@ The output.txt file located in the repository includes the output for the tests 
 ```
 ### Commands 
 
-QUOTE
-EVAL 
-DEFINE 
-SET
-CONS
-COND
-CAR
-CDR
+- QUOTE
+- EVAL 
+- DEFINE 
+- SET
+- CONS
+- COND
+- CAR
+- CDR
  
-AND?
-OR?
-NUMBER?
-SYMBOL?
-LIST?
-NIL?
-EQ?
+- AND?
+- OR?
+- NUMBER?
+- SYMBOL?
+- LIST?
+- NIL?
+- EQ?
  
  
-+
--
-*
-/
-=
-< 
-> 
+- +
+- -
+- *
+- /
+- =
+- < 
+- ">"
 
 ## How to Build and Run
 
