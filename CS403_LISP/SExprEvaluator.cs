@@ -20,7 +20,12 @@ public static class SExprEvaluator
         { "+", "add" },
         { "-", "sub" },
         { "*", "mul" },
-        { "/", "div" }
+        { "/", "div" },
+        { ">", "gt" },
+        { "<", "lt" },
+        { "<=", "lte" },
+        { ">=", "gte" },
+        
     };
 
     public static SExpr Eval(SExpr expr, Dictionary<string, SExpr>? env = null)
@@ -144,6 +149,12 @@ public static class SExprEvaluator
                     return SExprUtils.ToBoolean(condition)
                         ? Eval(list.Elements[2], env)
                         : Eval(list.Elements[3], env);
+
+                    
+                case "eval":
+                    var evalArg = Eval(list.Elements[1], env);
+                    return Eval(evalArg, env);
+                    
 
                 case "cond":
                     foreach (var clause in list.Elements.Skip(1))
