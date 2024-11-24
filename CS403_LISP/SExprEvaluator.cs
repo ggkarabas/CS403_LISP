@@ -11,7 +11,16 @@ public static class SExprEvaluator
     private static readonly HashSet<string> BuiltInFunctions = new HashSet<string>
     {
         "add", "sub", "mul", "div", "mod",
-        "lt", "gt", "lte", "gte", "eq", "not"
+        "lt", "gt", "lte", "gte", "eq", "not", "and", "or"
+    };
+
+
+    private static readonly Dictionary<string, string> SymbolicOperatorAliases = new Dictionary<string, string>
+    {
+        { "+", "add" },
+        { "-", "sub" },
+        { "*", "mul" },
+        { "/", "div" }
     };
 
     public static SExpr Eval(SExpr expr, Dictionary<string, SExpr>? env = null)
@@ -46,17 +55,54 @@ public static class SExprEvaluator
 
             if (firstElem is SExpr.Atom opAtom)
             {
-                var op = opAtom.Value;
+                // Resolve symbolic aliases
+                var op = SymbolicOperatorAliases.ContainsKey(opAtom.Value)
+                    ? SymbolicOperatorAliases[opAtom.Value]
+                    : opAtom.Value;
 
                 switch (op)
                 {
+
+                    case "and":
+                        foreach (var arg in list.Elements.Skip(1))
+                        {
+                            var result = Eval(arg, env);
+                            if (result == SExpr.Nil)
+                            {
+                                return SExpr.Nil;
+                            }
+                        }
+                        return SExpr.Truth;
+
+                    case "or":
+                        foreach (var arg in list.Elements.Skip(1))
+                        {
+                            var result = Eval(arg, env);
+                            if (result != SExpr.Nil)
+                            {
+                                return SExpr.Truth;
+                            }
+                        }
+                        return SExpr.Nil;
+
+
                     case "quote":
                         return list.Elements[1];
 
+                    case "define":
+                        var varName = (list.Elements[1] as SExpr.Atom)?.Value;
+                        if (string.IsNullOrEmpty(varName))
+                            throw new ArgumentException("Invalid variable name in define");
+
+                        var varValue = Eval(list.Elements[2], env);
+                        env[varName] = varValue;
+                        return varValue;
+
                     case "set":
                         var name = (list.Elements[1] as SExpr.Atom)?.Value;
-                        if (name == null)
-                            throw new ArgumentException("Invalid variable name");
+                        if (string.IsNullOrEmpty(name))
+                            throw new ArgumentException("Invalid variable name in set");
+
                         var value = Eval(list.Elements[2], env);
                         env[name] = value;
                         return value;
@@ -93,7 +139,6 @@ public static class SExprEvaluator
                         env[funcName] = function;
                         return new SExpr.Atom(funcName);
 
-
                     case "if":
                         var condition = Eval(list.Elements[1], env);
                         if (SExprUtils.ToBoolean(condition))
@@ -125,33 +170,7 @@ public static class SExprEvaluator
                         }
                         return SExpr.Nil;
 
-                    case "and":
-                        SExpr lastResult = SExpr.Truth;
-                        foreach (var arg in list.Elements.Skip(1))
-                        {
-                            var result = Eval(arg, env);
-                            if (!SExprUtils.ToBoolean(result))
-                            {
-                                return SExpr.Nil;
-                            }
-                            lastResult = result;
-                        }
-                        return lastResult;
-
-
-                    case "or":
-                        foreach (var arg in list.Elements.Skip(1))
-                        {
-                            var result = Eval(arg, env);
-                            if (SExprUtils.ToBoolean(result))
-                            {
-                                return result;
-                            }
-                        }
-                        return SExpr.Nil;
-
                     default:
-
                         if (IsBuiltInFunction(op))
                         {
                             var args = list.Elements.Skip(1).Select(arg => Eval(arg, env)).ToList();
@@ -172,7 +191,7 @@ public static class SExprEvaluator
                         }
                         else
                         {
-                            throw new ArgumentException($"Undefined function: {op}");
+                            throw new ArgumentException($"Undefined or unsupported function: {op}");
                         }
                 }
             }
