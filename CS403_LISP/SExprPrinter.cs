@@ -1,5 +1,3 @@
-// SExprPrinter.cs
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +27,10 @@ public static class SExprPrinter
         else if (expr is SExpr.ConsCell cons)
         {
             return PrintConsCell(cons);
+        }
+        else if (expr is SExpr.UserFunction func)
+        {
+            return $"<fn:{string.Join(" ", func.Parameters)}>";
         }
         else
         {
