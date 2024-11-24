@@ -13,7 +13,7 @@ Project completed by:
 
 ## Output Information
 
-The output.txt file will include the output for the successful test run. 
+The output.txt file located in the repository includes the output for the tests that are present in the Program.cs file.  
 
 ## Features
 

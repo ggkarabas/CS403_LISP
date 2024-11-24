@@ -8,7 +8,6 @@ public static void Main()
     {
         Console.WriteLine("Running tests...\n");
 
-        // Existing test methods
         TestParser();
         TestPrinter();
         TestSprint2();
@@ -19,11 +18,9 @@ public static void Main()
 
         Console.WriteLine("All tests completed.");
 
-        // Start the REPL
         StartInteractive();
     }
 
-    // Existing test methods...
 
     public static void StartInteractive()
     {
@@ -165,7 +162,6 @@ public static void Main()
         });
         Check(SExprPrinter.Print(nestedList) == "(define x (10 20))", "Test 3: Print nested list");
 
-        // Additional Tests
 
         // Test 4: Print empty list
         var emptyList = new SExpr.List(new System.Collections.Generic.List<SExpr>());

@@ -67,7 +67,6 @@ public abstract class SExpr
         }
     }
 
-    // Add the CreateAtom method
     public static Atom CreateAtom(string value)
     {
         return new Atom(value);

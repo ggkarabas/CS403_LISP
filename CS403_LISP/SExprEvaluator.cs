@@ -6,15 +6,12 @@ using System.Linq;
 
 public static class SExprEvaluator
 {
-    // The global environment contains both variables and functions.
     private static Dictionary<string, SExpr> GlobalEnvironment = new Dictionary<string, SExpr>();
 
-    // Set of built-in function names
     private static readonly HashSet<string> BuiltInFunctions = new HashSet<string>
     {
         "add", "sub", "mul", "div", "mod",
         "lt", "gt", "lte", "gte", "eq", "not"
-        // Note: 'and' and 'or' are handled as special forms
     };
 
     public static SExpr Eval(SExpr expr, Dictionary<string, SExpr>? env = null)
@@ -28,7 +25,6 @@ public static class SExprEvaluator
 
         if (expr is SExpr.Atom atom)
         {
-            // Handle special atoms 'nil' and '#t'
             if (atom.Value == "nil")
             {
                 return SExpr.Nil;
@@ -48,7 +44,6 @@ public static class SExprEvaluator
             var list = expr as SExpr.List;
             var firstElem = list.Elements[0];
 
-            // Special forms are not evaluated
             if (firstElem is SExpr.Atom opAtom)
             {
                 var op = opAtom.Value;
@@ -93,7 +88,6 @@ public static class SExprEvaluator
                             Environment = new Dictionary<string, SExpr>(env)
                         };
 
-                        // Add the function to its own environment for recursion
                         function.Environment[funcName] = function;
 
                         env[funcName] = function;
@@ -157,7 +151,7 @@ public static class SExprEvaluator
                         return SExpr.Nil;
 
                     default:
-                        // Handle built-in functions
+
                         if (IsBuiltInFunction(op))
                         {
                             var args = list.Elements.Skip(1).Select(arg => Eval(arg, env)).ToList();
@@ -232,16 +226,13 @@ public static class SExprEvaluator
         if (func.Parameters.Count != args.Count)
             throw new ArgumentException("Argument count mismatch");
 
-        // Create a new environment for the function call
         var localEnv = new Dictionary<string, SExpr>(func.Environment);
 
-        // Bind parameters to arguments
         for (int i = 0; i < func.Parameters.Count; i++)
         {
             localEnv[func.Parameters[i]] = args[i];
         }
 
-        // Evaluate the function body in the new environment
         return Eval(func.Body, localEnv);
     }
 
@@ -265,7 +256,6 @@ public static class SExprEvaluator
         }
     }
 
-    // Add the Set method
     public static void Set(string name, SExpr value)
     {
         GlobalEnvironment[name] = value;

@@ -26,7 +26,6 @@ public static class SExprParser
             }
             else if (input[i] == ';')
             {
-                // Skip the rest of the line (handle comments)
                 while (i < length && input[i] != '\n')
                 {
                     i++;
@@ -39,7 +38,6 @@ public static class SExprParser
             }
             else if (input[i] == '"')
             {
-                // Handle string literals
                 StringBuilder sb = new StringBuilder();
                 sb.Append(input[i]); // Append the opening quote
                 i++;
