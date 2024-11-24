@@ -98,35 +98,46 @@ The output.txt file located in the repository includes the output for the tests 
 (add x 5)           ; Returns 15
 ```
 
+
 ## Core Commands
-- `QUOTE`
-- `EVAL`
-- `DEFINE`
-- `SET`
-- `CONS`
-- `COND`
-- `CAR`
-- `CDR`
+
+- `quote`
+- `eval`
+- `define`
+- `set`
+- `cons`
+- `cond`
+- `car`
+- `cdr`
+- `fn`
 
 ## Logical Operators
-- `AND?`
-- `OR?`
+
+- `and`
+- `or`
+- `not`
+- `if`
 
 ## Predicates
-- `NUMBER?`
-- `SYMBOL?`
-- `LIST?`
-- `NIL?`
-- `EQ?`
+
+- `number?`
+- `symbol?`
+- `list?`
+- `nil?`
+- `eq`
 
 ## Arithmetic Operations
-- `+`
-- `-`
-- `*`
-- `/`
-- `=`
-- `<`
-- `>`
+
+- `add` or `+`
+- `sub` or `-`
+- `mul` or `*`
+- `div` or `/`
+- `mod`
+- `eq` or `=`
+- `lt` or `<`
+- `gt` or `>`
+- `lte` or `<=`
+- `gte` or `>=`
 
 
 ## How to Build and Run
