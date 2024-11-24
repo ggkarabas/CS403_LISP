@@ -97,33 +97,38 @@ The output.txt file located in the repository includes the output for the tests 
 (set x 10)          ; Sets `x` to 10
 (add x 5)           ; Returns 15
 ```
-### Commands 
+# Commands
 
-- QUOTE
-- EVAL 
-- DEFINE 
-- SET
-- CONS
-- COND
-- CAR
-- CDR
- 
-- AND?
-- OR?
-- NUMBER?
-- SYMBOL?
-- LIST?
-- NIL?
-- EQ?
- 
- 
-- +
-- -
-- *
-- /
-- =
-- < 
-- ">"
+## Core Commands
+- `QUOTE`
+- `EVAL`
+- `DEFINE`
+- `SET`
+- `CONS`
+- `COND`
+- `CAR`
+- `CDR`
+
+## Logical Operators
+- `AND?`
+- `OR?`
+
+## Predicates
+- `NUMBER?`
+- `SYMBOL?`
+- `LIST?`
+- `NIL?`
+- `EQ?`
+
+## Arithmetic Operations
+- `+`
+- `-`
+- `*`
+- `/`
+- `=`
+- `<`
+- `>`
+
 
 ## How to Build and Run
 
