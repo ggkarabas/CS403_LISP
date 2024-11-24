@@ -61,12 +61,10 @@ public static class SExprEvaluator
         {
             var list = expr as SExpr.List;
 
-            // Treat lists as data if the first element is not a symbol or a valid function/operator
             if (list.Elements.Count == 0 || !(list.Elements[0] is SExpr.Atom opAtom) || SExprUtils.IsNumber(opAtom))
             {
                 return new SExpr.List(list.Elements.Select(element => Eval(element, env)).ToList());
             }
-
 
             // Handle function calls and special forms
             var op = SymbolicOperatorAliases.ContainsKey(opAtom.Value)
@@ -112,10 +110,8 @@ public static class SExprEvaluator
                         Environment = new Dictionary<string, SExpr>(env)
                     };
 
-                    // Add the function itself to its environment for recursive calls
                     function.Environment[funcName] = function;
 
-                    // Store the function in the global environment
                     env[funcName] = function;
 
                     return new SExpr.Atom(funcName);
@@ -264,16 +260,13 @@ public static class SExprEvaluator
         if (func.Parameters.Count != args.Count)
             throw new ArgumentException($"Function {func} expected {func.Parameters.Count} arguments but got {args.Count}");
 
-        // Create a local environment for the function
         var localEnv = new Dictionary<string, SExpr>(func.Environment);
 
-        // Map arguments to parameters in the local environment
         for (int i = 0; i < func.Parameters.Count; i++)
         {
             localEnv[func.Parameters[i]] = args[i];
         }
 
-        // Evaluate the function body in the local environment
         return Eval(func.Body, localEnv);
     }
 
