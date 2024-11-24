@@ -97,7 +97,6 @@ The output.txt file located in the repository includes the output for the tests 
 (set x 10)          ; Sets `x` to 10
 (add x 5)           ; Returns 15
 ```
-# Commands
 
 ## Core Commands
 - `QUOTE`
